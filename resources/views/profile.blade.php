@@ -12,19 +12,21 @@
                        
                 <x-validation-errors class="mb-4" :errors="$errors" />
                 <x-success-message />
-                    <form method="POST" action="{{ route('profile.update') }}">
+                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         <div class="grid grid-cols-2 gap-6">
                             <div class="grid grid-rows-2 gap-6">
                                 <div>
                                     <x-label for="name" :value="__('Name')" />
-                                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ auth()->user()->name }}" autofocus />
+                                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ auth()->user()->username }}" autofocus />
                                 </div>
+                                
                                 <div>
                                     <x-label for="email" :value="__('Email')" />
                                     <x-input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ auth()->user()->email }}" autofocus />
                                 </div>
+                                
                             </div>
                             <div class="grid grid-rows-2 gap-6">
                                 <div>
@@ -38,9 +40,19 @@
                                     <x-label for="confirm_password" :value="__('Confirm password')" />
                                     <x-input id="confirm_password" class="block mt-1 w-full"
                                              type="password"
-                                             name="confirmation password"
+                                             name="password_confirmation"
                                              autocomplete="confirm-password" />
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-rows-2 gap-6 mt-4" class="text-center">
+                            <div>
+                                <x-label for="avatar" :value="__('Avatar')" />
+                                <img  width="90" hight="20" class="rounded full"  src="{{ asset('storage/' .auth()->user()->avatar) }}"  alt="user avatar"/>
+                                <x-input id="avatar" name="avatar" type="file" class="mt-1 block w-full" 
+                                required autofocus autocomplete="avatar" />
+                                
                             </div>
                         </div>
                         <div class="flex items-center justify-end mt-4">
@@ -54,3 +66,7 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+

@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\User;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -26,7 +27,9 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'email',
+        'avatar',
         'password',
+        
     ];
 
     
@@ -51,6 +54,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getIsAdminAttribute(): bool
+    {
+        $admins = ['harmy.adroja@gmail.com'];
+        return in_array($this->email, $admins);
+    }
+
+    public function tickets(): hasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     // public function getUsernameAttribute($username)
     // {
     //     return $this->attributes['username'] = strtoupper($username);
@@ -58,12 +72,12 @@ class User extends Authenticatable
    
     
 
-    public function setPasswordAttribute($password)
-{
-    //dd(Hash::make($password));
-    //if(Hash::needsRehash($password)) 
-        $password = Hash::make($password);
+//     public function setPasswordAttribute($password)
+// {
+//     //dd(Hash::make($password));
+//     //if(Hash::needsRehash($password)) 
+//         $password = Hash::make($password);
 
-    $this->attributes['password'] = $password;
-}
+//     $this->attributes['password'] = $password;
+// }
 }

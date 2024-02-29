@@ -1,12 +1,16 @@
 <?php
 
 use App\Models\User;
+use App\Http\Controllers\Users;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Users;
-use App\Http\Controllers\ProfileInformationController;
 use App\Http\Controllers\SomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Profile\NameController;
+use App\Http\Controllers\ProfileInformationController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\CommentsController;
+
 
 
 
@@ -23,10 +27,11 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::group(['middleware' => 'auth'],function(){
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+Route::group(['middleware' => 'auth'],function()
+{
+    Route::get('/dashboard', function () 
+    {
+        return view('dashboard');})->name('dashboard');
 
    // Route::view(uri: 'profile', view:'profile')->(name: 'profile');
    Route::view('profile', 'profile')->name('profile');
@@ -35,12 +40,30 @@ Route::group(['middleware' => 'auth'],function(){
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])
         ->name('profile.update');
 
+    });
 
-});
+    //Route::group(['middleware' => 'auth'],function(){
+    Route::resource('/ticket',TicketController::class);
+    Route::resource('ticket.comments', CommentsController::class)->only(['store']);
+    //Route::get('/ticket/create',[TicketController::class,'create'])->name('ticket.create');
+    //Route::post('/ticket/create',[TicketController::class,'store'])->name('ticket.store'); 
+       
+    //Route::resource('/comments',CommentsController::class);
+//});
+
+    
+
+
+    require __DIR__.'/auth.php';
+        // Route::get('/Update', function () 
+        // {
+        //     return view('about');})->name('about');
+
+    
+
  
     
-    require __DIR__.'/auth.php';
-
+    
     
     
     //fetch all user

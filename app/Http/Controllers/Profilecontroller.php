@@ -10,6 +10,8 @@ class Profilecontroller extends Controller
     public function update(UpdateProfileRequest $request)
     {
         {
+           // dd($request->user());
+            //dd($request->file('avatar'));
             auth()->user()->update($request->only('name', 'email'));
     
             if ($request->input('password')) {
@@ -17,8 +19,15 @@ class Profilecontroller extends Controller
                     'password' => bcrypt($request->input('password'))
                 ]);
             }
-    
-            return redirect()->route('profile')->with('message', 'Profile saved successfully');
+            //auth()->user()->update(['avatar'=>'test']);
+            //dd(auth()->user());
+            $path=$request->file('avatar')->store('avatars','public');
+            //dd($path);
+           // auth()->user()->update(['avatar'=> storage_path('app')."/$path"]);
+           auth()->user()->update(['avatar'=>$path]);
+            
+
+            return redirect()->route('profile.update')->with('message', 'Profile saved successfully');
         }
     }
 }
